@@ -9,7 +9,7 @@ PINNEN
 #define SSID          "NETGEAR68"
 #define PWD           "excitedtuba713"
 
-#define MQTT_SERVER   "192.168.1.7"
+#define MQTT_SERVER   "192.168.1.2"
 #define MQTT_PORT     1883
 
 WiFiClient espClient;
