@@ -168,7 +168,7 @@ void reconnect() {
   while (!client.connected()) { // loop until we're reconnected
     Serial.print("Attempting MQTT connection...");
     // attempt to connect
-    if (client.connect("ESP8266Client")) {
+    if (client.connect("ESP_LEDbar")) {
       Serial.println("connected");
       client.subscribe("espMorse");
       client.subscribe("espOntsmet");
