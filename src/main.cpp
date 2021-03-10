@@ -20,7 +20,7 @@ int value = 0;
 
 bool vijfG = false;                     // in het aan onze puzzel? aan indien morse klaar, uit indien 5G puzzel voltooid
 bool aan = true;                        // ledbar aan? (moet uit bij ontsmetten of indien auto opgenomen)        
-int RSSI = 0;                           // de afstand tot de stralingslocatie
+int RSSI = 0;                           // geeft de afstand tot de stralingslocatie weer
 
 int ledA = 13;
 int ledB = 12;
@@ -28,6 +28,8 @@ int ledC = 14;
 int ledD = 27;
 int ledE = 26;
 int ledF = 25;
+int ledG = 33;
+int ledH = 32;
 
 void allemaalAan() {
   digitalWrite(ledA, HIGH);
@@ -36,6 +38,8 @@ void allemaalAan() {
   digitalWrite(ledD, HIGH);
   digitalWrite(ledE, HIGH);
   digitalWrite(ledF, HIGH);
+  digitalWrite(ledG, HIGH);
+  digitalWrite(ledH, HIGH);
 }
 
 void allemaalUit() {
@@ -45,10 +49,13 @@ void allemaalUit() {
   digitalWrite(ledD, LOW);
   digitalWrite(ledE, LOW);
   digitalWrite(ledF, LOW);
+  digitalWrite(ledG, LOW);
+  digitalWrite(ledH, LOW);
 }
 
 void updateLEDs(int RSSI) {
-  if (RSSI < 30) {
+  // initieel wordt er een RSSI waarde van nul weergegeven -- hierbij willen we nog geen reactie van de LEDs
+  if (RSSI < 30 && RSSI != 0) {
     allemaalAan();
   }
   else if (RSSI < 40) {
@@ -57,15 +64,39 @@ void updateLEDs(int RSSI) {
     digitalWrite(ledC, HIGH);
     digitalWrite(ledD, HIGH);
     digitalWrite(ledE, HIGH);
-    digitalWrite(ledF, LOW);
+    digitalWrite(ledF, HIGH);
+    digitalWrite(ledG, HIGH);
+    digitalWrite(ledH, LOW);
+  }
+  else if (RSSI < 45) {
+    digitalWrite(ledA, HIGH);
+    digitalWrite(ledB, HIGH);
+    digitalWrite(ledC, HIGH);
+    digitalWrite(ledD, HIGH);
+    digitalWrite(ledE, HIGH);
+    digitalWrite(ledF, HIGH);
+    digitalWrite(ledG, LOW);
+    digitalWrite(ledH, LOW);
   }
   else if (RSSI < 50) {
     digitalWrite(ledA, HIGH);
     digitalWrite(ledB, HIGH);
     digitalWrite(ledC, HIGH);
     digitalWrite(ledD, HIGH);
+    digitalWrite(ledE, HIGH);
+    digitalWrite(ledF, LOW);
+    digitalWrite(ledG, LOW);
+    digitalWrite(ledH, LOW);
+  }
+  else if (RSSI < 55) {
+    digitalWrite(ledA, HIGH);
+    digitalWrite(ledB, HIGH);
+    digitalWrite(ledC, HIGH);
+    digitalWrite(ledD, HIGH);
     digitalWrite(ledE, LOW);
     digitalWrite(ledF, LOW);
+    digitalWrite(ledG, LOW);
+    digitalWrite(ledH, LOW);
   }
   else if (RSSI < 60) {
     digitalWrite(ledA, HIGH);
@@ -74,6 +105,8 @@ void updateLEDs(int RSSI) {
     digitalWrite(ledD, LOW);
     digitalWrite(ledE, LOW);
     digitalWrite(ledF, LOW);
+    digitalWrite(ledG, LOW);
+    digitalWrite(ledH, LOW);
   }
   else if (RSSI < 70) {
     digitalWrite(ledA, HIGH);
@@ -82,6 +115,8 @@ void updateLEDs(int RSSI) {
     digitalWrite(ledD, LOW);
     digitalWrite(ledE, LOW);
     digitalWrite(ledF, LOW);
+    digitalWrite(ledG, LOW);
+    digitalWrite(ledH, LOW);
   }
   else if (RSSI < 80) {
     digitalWrite(ledA, HIGH);
@@ -90,6 +125,8 @@ void updateLEDs(int RSSI) {
     digitalWrite(ledD, LOW);
     digitalWrite(ledE, LOW);
     digitalWrite(ledF, LOW);
+    digitalWrite(ledG, LOW);
+    digitalWrite(ledH, LOW);
   }
   else if (RSSI == 200) {
     Serial.println("auto wordt opgenomen");
@@ -156,7 +193,7 @@ void callback(char *topic, byte *message, unsigned int length) {
 
   // verbinding met onze robot
 
-  if (String(topic) == "rssiwaarde") {
+  if (String(topic) == "esp32/rssiwaarde") {
     RSSI = messageTemp.toInt();
     if (aan && vijfG) {
       updateLEDs(RSSI); // update leds aan de hand van de RSSI waarde
@@ -172,7 +209,7 @@ void reconnect() {
       Serial.println("connected");
       client.subscribe("espMorse");
       client.subscribe("espOntsmet");
-      client.subscribe("rssiwaarde");
+      client.subscribe("esp32/rssiwaarde");
     }
     else {
       Serial.print("failed, rc=");
