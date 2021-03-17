@@ -230,6 +230,8 @@ void setup() {
   pinMode(ledD, OUTPUT); 
   pinMode(ledE, OUTPUT);
   pinMode(ledF, OUTPUT);
+  pinMode(ledG, OUTPUT);
+  pinMode(ledH, OUTPUT);
 
   setup_wifi();                         // stel wi-fi verbinding in
   client.setServer(MQTT_SERVER, MQTT_PORT);
